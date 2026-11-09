@@ -13,10 +13,47 @@ class LoginRegisterApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Lab Activity 3',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
-        ),
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.teal,
+          primary: Colors.teal,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.teal,
+          foregroundColor: Colors.white,
+          centerTitle: true,
+          elevation: 2,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.teal,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.teal,
+            textStyle: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Colors.teal, width: 2),
+          ),
+          prefixIconColor: Colors.teal,
+        ),
       ),
       home: const AuthPage(),
     );
@@ -45,7 +82,11 @@ class _AuthPageState extends State<AuthPage> {
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.teal.shade800,
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
@@ -139,7 +180,7 @@ class _AuthPageState extends State<AuthPage> {
                 const Icon(
                   Icons.check_circle,
                   size: 80,
-                  color: Colors.green,
+                  color: Colors.teal,
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -151,11 +192,53 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(_registeredEmail ?? ''),
+                Text(
+                  _registeredEmail ?? '',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey.shade700,
+                  ),
+                ),
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: _logout,
                   child: const Text('Logout'),
+                ),
+                const SizedBox(height: 32),
+                Card(
+                  elevation: 0,
+                  color: Colors.teal.withValues(alpha: 0.08),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(color: Colors.teal.withValues(alpha: 0.3)),
+                  ),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Student: Lourde Vincent Pablo',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.teal,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Section: BSIT 3-A',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -163,6 +246,7 @@ class _AuthPageState extends State<AuthPage> {
         ),
       );
     }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -172,143 +256,204 @@ class _AuthPageState extends State<AuthPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Icon(
-                  Icons.account_circle,
-                  size: 80,
-                  color: Colors.indigo,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Requirement: Add an application name above the form
+              const Text(
+                'AuthPortal App',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.teal,
+                  letterSpacing: 0.8,
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  _isLogin ? 'Welcome Back!' : 'Create an Account',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                // Display the name field during registration.
-                if (!_isLogin) ...[
-                  TextFormField(
-                    controller: _nameController,
-                    textCapitalization: TextCapitalization.words,
-                    decoration: const InputDecoration(
-                      labelText: 'Full Name',
-                      prefixIcon: Icon(Icons.person),
-                      border: OutlineInputBorder(),
+              ),
+              const SizedBox(height: 16),
+
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Icon(
+                      Icons.account_circle,
+                      size: 80,
+                      color: Colors.teal,
                     ),
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter your full name.';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                ],
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    final email = value?.trim() ?? '';
-                    if (email.isEmpty) {
-                      return 'Please enter your email.';
-                    }
-                    // Basic format check for this activity.
-                    final emailPattern =
-                        RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-                    if (!emailPattern.hasMatch(email)) {
-                      return 'Please enter a valid email.';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _hidePassword,
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: const Icon(Icons.lock),
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      tooltip:
-                          _hidePassword ? 'Show password' : 'Hide password',
-                      icon: Icon(
-                        _hidePassword ? Icons.visibility : Icons.visibility_off,
+                    const SizedBox(height: 16),
+                    Text(
+                      _isLogin ? 'Welcome Back!' : 'Create an Account',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _hidePassword = !_hidePassword;
-                        });
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Display the name field during registration
+                    if (!_isLogin) ...[
+                      TextFormField(
+                        controller: _nameController,
+                        textCapitalization: TextCapitalization.words,
+                        decoration: const InputDecoration(
+                          labelText: 'Full Name',
+                          prefixIcon: Icon(Icons.person),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Please enter your full name.';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+
+                    TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      autocorrect: false,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Icon(Icons.email),
+                      ),
+                      validator: (value) {
+                        final email = value?.trim() ?? '';
+                        if (email.isEmpty) {
+                          return 'Please enter your email.';
+                        }
+                        final emailPattern =
+                            RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+                        if (!emailPattern.hasMatch(email)) {
+                          return 'Please enter a valid email.';
+                        }
+                        return null;
                       },
                     ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password.';
-                    }
-                    if (value.length < 6) {
-                      return 'Use at least 6 characters.';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                // Display confirmation during registration.
-                if (!_isLogin) ...[
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    obscureText: _hidePassword,
-                    autocorrect: false,
-                    enableSuggestions: false,
-                    decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
-                      prefixIcon: Icon(Icons.lock_outline),
-                      border: OutlineInputBorder(),
+                    const SizedBox(height: 16),
+
+                    // Requirement: Minimum password length of 8 characters
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: _hidePassword,
+                      autocorrect: false,
+                      enableSuggestions: false,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: const Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          tooltip:
+                              _hidePassword ? 'Show password' : 'Hide password',
+                          icon: Icon(
+                            _hidePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.teal,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _hidePassword = !_hidePassword;
+                            });
+                          },
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password.';
+                        }
+                        if (value.length < 8) {
+                          return 'Use at least 8 characters.';
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please confirm your password.';
-                      }
-                      if (value != _passwordController.text) {
-                        return 'Passwords do not match.';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                ],
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: Text(
-                    _isLogin ? 'Login' : 'Register',
+                    const SizedBox(height: 16),
+
+                    // Display confirmation during registration
+                    if (!_isLogin) ...[
+                      TextFormField(
+                        controller: _confirmPasswordController,
+                        obscureText: _hidePassword,
+                        autocorrect: false,
+                        enableSuggestions: false,
+                        decoration: const InputDecoration(
+                          labelText: 'Confirm Password',
+                          prefixIcon: Icon(Icons.lock_outline),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please confirm your password.';
+                          }
+                          if (value != _passwordController.text) {
+                            return 'Passwords do not match.';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+
+                    ElevatedButton(
+                      onPressed: _submitForm,
+                      child: Text(
+                        _isLogin ? 'Login' : 'Register',
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    TextButton(
+                      onPressed: _switchForm,
+                      child: Text(
+                        _isLogin
+                            ? 'No account yet? Register'
+                            : 'Already have an account? Login',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Requirement: Add your name and section below the form
+              Card(
+                elevation: 0,
+                color: Colors.teal.withValues(alpha: 0.08),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(color: Colors.teal.withValues(alpha: 0.3)),
+                ),
+                child: const Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Student: Lourde Vincent Pablo',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.teal,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Section: BSIT 3-A',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 8),
-                TextButton(
-                  onPressed: _switchForm,
-                  child: Text(
-                    _isLogin
-                        ? 'No account yet? Register'
-                        : 'Already have an account? Login',
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
